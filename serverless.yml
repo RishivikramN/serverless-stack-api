@@ -15,11 +15,48 @@ provider:
   runtime: nodejs12.x
   stage: prod
   region: us-east-1
+  environment:
+    tableName: notes
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+        - dynamodb:Query
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:DescribeTable
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
 functions:
-  hello:
-    handler: handler.hello
+  create:
+    handler: createNote.create
     events:
       - http:
-          path: hello
+          path: notes
+          method: post
+  get:
+    handler: getNote.get
+    events: 
+      - http:
+          path: notes/{id}
           method: get
+  list:
+    handler: listNotes.list
+    events:
+      - http:
+          path: notes
+          method: get
+  update:
+    handler: updateNote.update
+    events:
+      - http:
+          path: notes/{id}
+          method: put
+  delete:
+    handler: deleteNote.main
+    events:
+      - http:
+          path: notes/{id}
+          method: delete
