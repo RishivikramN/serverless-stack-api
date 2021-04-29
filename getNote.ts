@@ -16,7 +16,7 @@ export const get = handler(async (event: APIGatewayEvent, context: Context): Pro
   const params: Params = {
     TableName: process.env.tableName,
     Key: {
-      userId: "123", 
+      userId: event.requestContext.identity.cognitoIdentityId, 
       noteId: event.pathParameters.id, 
     },
   };

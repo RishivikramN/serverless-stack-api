@@ -7,7 +7,7 @@ export const update = handler(async (event, context) => {
     TableName: process.env.tableName,
     
     Key: {
-      userId: "123", 
+      userId: event.requestContext.identity.cognitoIdentityId, 
       noteId: event.pathParameters.id, 
     },
     
